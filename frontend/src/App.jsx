@@ -17,7 +17,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import Friends from "./pages/Friends";
-import Recommendations from "./pages/Recommendations";
+// import Recommendations from "./pages/Recommendations";
 import Layout from "./pages/Layout";
 
 const App = () => {
@@ -45,14 +45,7 @@ const App = () => {
               </Layout>
             }
           />
-          <Route
-            path="/recommendations"
-            element={
-              <Layout>
-                <Recommendations />
-              </Layout>
-            }
-          />
+         
         </Routes>
       </Router>
     </Provider>

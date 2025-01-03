@@ -1,18 +1,28 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchFriends, fetchRecommendations, fetchPendingRequests, acceptRequest, rejectRequest } from "../features/friends/friendsSlice"; // Assuming these actions are defined in your slice
+import {
+  fetchFriends,
+  fetchRecommendations,
+  fetchPendingRequests,
+  acceptRequest,
+  rejectRequest,
+} from "../features/friends/friendsSlice"; // Assuming these actions are defined in your slice
 
-const Friends = () => {
+const Friends = ({ user }) => {
   const dispatch = useDispatch();
-  const { friends, recommendations, pendingRequests, loading, error } = useSelector(
-    (state) => state.friends
-  );
+
+  // Make sure `pendingRequests` exists and is part of the Redux state
+  const { friends, recommendations, pendingRequests, loading, error } =
+    useSelector((state) => state.friends);
 
   useEffect(() => {
-    dispatch(fetchFriends());  // Fetch friends when the component mounts
-    dispatch(fetchRecommendations());  // Fetch recommendations when the component mounts
-    dispatch(fetchPendingRequests());  // Fetch pending friend requests when the component mounts
-  }, [dispatch]);
+    // Only refetch data when the user token changes
+     {
+      dispatch(fetchFriends());
+      dispatch(fetchRecommendations());
+      dispatch(fetchPendingRequests());
+    }
+  }, [ dispatch]); // Refetch when token changes
 
   // Handle accepting a friend request
   const handleAcceptRequest = (requestId) => {
@@ -27,20 +37,30 @@ const Friends = () => {
   };
 
   if (loading) return <div className="text-center py-4">Loading...</div>;
-  if (error) return <div className="text-center py-4 text-red-600">Error: {error}</div>;
+  if (error)
+    return <div className="text-center py-4 text-red-600">Error: {error}</div>;
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {/* Friends List Section */}
       <div className="mb-8">
-        <h2 className="text-2xl font-semibold text-gray-800 mb-4">Friends List</h2>
+        <h2 className="text-2xl font-semibold text-gray-800 mb-4">
+          Friends List
+        </h2>
         <div className="overflow-x-auto bg-white shadow-lg rounded-lg p-4">
           <ul className="space-y-4">
             {friends.map((friend) => (
-              <li key={friend._id} className="flex justify-between items-center p-4 border-b">
+              <li
+                key={friend._id}
+                className="flex justify-between items-center p-4 border-b"
+              >
                 <div className="flex items-center space-x-3">
-                  <span className="text-lg font-medium">{friend.fullname.firstname} {friend.fullname.lastname}</span>
-                  <span className="text-sm text-gray-500">@{friend.username}</span>
+                  <span className="text-lg font-medium">
+                    {friend.fullname.firstname} {friend.fullname.lastname}
+                  </span>
+                  <span className="text-sm text-gray-500">
+                    @{friend.username}
+                  </span>
                 </div>
               </li>
             ))}
@@ -50,17 +70,26 @@ const Friends = () => {
 
       {/* Pending Requests Section */}
       <div className="mb-8">
-        <h2 className="text-2xl font-semibold text-gray-800 mb-4">Pending Friend Requests</h2>
+        <h2 className="text-2xl font-semibold text-gray-800 mb-4">
+          Pending Friend Requests
+        </h2>
         <div className="overflow-x-auto bg-white shadow-lg rounded-lg p-4">
           {pendingRequests.length === 0 ? (
             <p className="text-center text-gray-500">No pending requests.</p>
           ) : (
             <ul className="space-y-4">
               {pendingRequests.map((request) => (
-                <li key={request._id} className="flex justify-between items-center p-4 border-b">
+                <li
+                  key={request._id}
+                  className="flex justify-between items-center p-4 border-b"
+                >
                   <div className="flex items-center space-x-3">
-                    <span className="text-lg font-medium">{request.fullname.firstname} {request.fullname.lastname}</span>
-                    <span className="text-sm text-gray-500">@{request.username}</span>
+                    <span className="text-lg font-medium">
+                      {request.fullname.firstname} {request.fullname.lastname}
+                    </span>
+                    <span className="text-sm text-gray-500">
+                      @{request.username}
+                    </span>
                   </div>
                   <div className="space-x-3">
                     <button
@@ -85,18 +114,26 @@ const Friends = () => {
 
       {/* Friend Recommendations Section */}
       <div>
-        <h2 className="text-2xl font-semibold text-gray-800 mb-4">Friend Recommendations</h2>
+        <h2 className="text-2xl font-semibold text-gray-800 mb-4">
+          Friend Recommendations
+        </h2>
         <div className="overflow-x-auto bg-white shadow-lg rounded-lg p-4">
           <ul className="space-y-4">
             {recommendations.map((recommendation) => (
-              <li key={recommendation._id} className="flex justify-between items-center p-4 border-b">
+              <li
+                key={recommendation._id}
+                className="flex justify-between items-center p-4 border-b"
+              >
                 <div className="flex items-center space-x-3">
-                  <span className="text-lg font-medium">{recommendation.fullname.firstname} {recommendation.fullname.lastname}</span>
-                  <span className="text-sm text-gray-500">@{recommendation.username}</span>
+                  <span className="text-lg font-medium">
+                    {recommendation.fullname.firstname}{" "}
+                    {recommendation.fullname.lastname}
+                  </span>
+                  <span className="text-sm text-gray-500">
+                    @{recommendation.username}
+                  </span>
                 </div>
-                <button
-                  className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition"
-                >
+                <button className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition">
                   Add Friend
                 </button>
               </li>

@@ -6,14 +6,16 @@ import { FaHome, FaUserFriends, FaStar, FaSignOutAlt } from "react-icons/fa";
 import { useDispatch } from "react-redux";
 import { logout } from "../features/auth/authSlice";
 import { Button } from "../components/ui/button";
+import { useNavigate } from "react-router-dom";
 
 const Layout = ({ children }) => {
   const dispatch = useDispatch();
-
+const navigate = useNavigate();
   // Handle logout
   const handleLogout = () => {
     dispatch(logout());
     localStorage.removeItem("token");
+    navigate("/");
   };
 
   return (
@@ -40,15 +42,7 @@ const Layout = ({ children }) => {
               Friends
             </Link>
           </li>
-          {/* <li>
-            <Link
-              to="/recommendations"
-              className="flex items-center p-3 rounded-lg hover:bg-gray-700 transition-colors"
-            >
-              <FaStar className="mr-3" />
-              Recommendations
-            </Link>
-          </li> */}
+          
         </ul>
         <Button
           className="mt-8 w-full bg-red-500 hover:bg-red-600 flex items-center justify-center"

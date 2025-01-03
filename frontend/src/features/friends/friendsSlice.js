@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "../../api/friends"; // Make sure axios is correctly configured with the correct baseURL
+import axios from "../../api/friends"; // Ensure axios is correctly configured with the correct baseURL
 
 // Initial state
 const initialState = {
@@ -18,7 +18,6 @@ export const fetchFriends = createAsyncThunk(
       const response = await axios.get("/friends"); // Ensure the endpoint is correct
       return response.data;
     } catch (error) {
-      // Improved error handling
       const errorMsg = error.response
         ? error.response.data.message
         : "An error occurred while fetching friends.";
@@ -35,7 +34,6 @@ export const fetchRecommendations = createAsyncThunk(
       const response = await axios.get("/recommendations"); // Ensure the endpoint is correct
       return response.data;
     } catch (error) {
-      // Improved error handling
       const errorMsg = error.response
         ? error.response.data.message
         : "An error occurred while fetching recommendations.";
@@ -71,10 +69,9 @@ const friendsSlice = createSlice({
     removeFriend: (state, action) => {
       // Removes a friend by id
       state.friends = state.friends.filter(
-        (friend) => friend.id !== action.payload
+        (friend) => friend._id !== action.payload // Ensure using _id for the friend
       );
     },
-    // Action to accept a friend request
     // Reducer for accepting a friend request
     acceptRequest: (state, action) => {
       const { fromUserId } = action.payload;
@@ -99,7 +96,7 @@ const friendsSlice = createSlice({
     rejectRequest: (state, action) => {
       // Remove the request from pending
       state.pendingRequests = state.pendingRequests.filter(
-        (request) => request.id !== action.payload
+        (request) => request._id !== action.payload
       );
     },
   },

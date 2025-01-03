@@ -190,6 +190,39 @@ const recommendFriends = async (req, res) => {
     }
 };
 
+// Get All Users
+const getAllUsers = async (req, res) => {
+  try {
+    const users = await User.find().select("fullname username email gender");
+    res.status(200).json(users);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+// Get Pending Friend Requests
+const getPendingRequests = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id); // Find the logged-in user
+
+    // Check if the user exists
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Find users who have sent friend requests to the logged-in user
+    const pendingRequests = await User.find({
+      _id: { $in: user.friendRequests }, // Only find users who are in the friendRequests array of the logged-in user
+    }).select("fullname username email gender");
+
+    if (pendingRequests.length === 0) {
+      return res.status(200).json({ message: "No pending requests" });
+    }
+
+    res.status(200).json(pendingRequests); // Return the list of users who have pending requests
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
 
 module.exports = {
   registerUser,
@@ -198,5 +231,7 @@ module.exports = {
   handleFriendRequest,
   getFriendsList,
   searchUsers,
-  recommendFriends 
+  recommendFriends ,
+  getAllUsers,
+  getPendingRequests,
 };

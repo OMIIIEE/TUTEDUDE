@@ -105,6 +105,7 @@ const sendFriendRequest = async (req, res) => {
 };
 
 // Accept/Reject Friend Request
+
 const handleFriendRequest = async (req, res) => {
   const { fromUserId, action } = req.body;
 
@@ -122,8 +123,8 @@ const handleFriendRequest = async (req, res) => {
 
     // Accept Request
     if (action === "accept") {
-      user.friends.push(fromUserId);
-      fromUser.friends.push(user.id);
+      user.friends.push(fromUserId);  // Add fromUser to user.friends
+      fromUser.friends.push(user.id);  // Add user to fromUser.friends
     }
 
     // Remove Request
@@ -131,14 +132,15 @@ const handleFriendRequest = async (req, res) => {
       (id) => id.toString() !== fromUserId
     );
 
-    await user.save();
-    await fromUser.save();
+    await user.save(); // Save user with updated friends and friendRequests
+    await fromUser.save(); // Save fromUser with updated friends
 
     res.status(200).json({ message: `Friend request ${action}ed` });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
+
 
 // Get Friends List
 const getFriendsList = async (req, res) => {

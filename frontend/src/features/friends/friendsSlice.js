@@ -1,11 +1,11 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "../../api/friends";  // Make sure axios is correctly configured with the correct baseURL
+import axios from "../../api/friends"; // Make sure axios is correctly configured with the correct baseURL
 
 // Initial state
 const initialState = {
   friends: [],
   recommendations: [],
-  pendingRequests: [],  // New state for pending requests
+  pendingRequests: [], // New state for pending requests
   loading: false,
   error: null,
 };
@@ -15,11 +15,13 @@ export const fetchFriends = createAsyncThunk(
   "friends/fetchFriends",
   async (_, thunkAPI) => {
     try {
-      const response = await axios.get("/friends");  // Ensure the endpoint is correct
+      const response = await axios.get("/friends"); // Ensure the endpoint is correct
       return response.data;
     } catch (error) {
       // Improved error handling
-      const errorMsg = error.response ? error.response.data.message : 'An error occurred while fetching friends.';
+      const errorMsg = error.response
+        ? error.response.data.message
+        : "An error occurred while fetching friends.";
       return thunkAPI.rejectWithValue(errorMsg);
     }
   }
@@ -30,11 +32,13 @@ export const fetchRecommendations = createAsyncThunk(
   "friends/fetchRecommendations",
   async (_, thunkAPI) => {
     try {
-      const response = await axios.get("/recommendations");  // Ensure the endpoint is correct
+      const response = await axios.get("/recommendations"); // Ensure the endpoint is correct
       return response.data;
     } catch (error) {
       // Improved error handling
-      const errorMsg = error.response ? error.response.data.message : 'An error occurred while fetching recommendations.';
+      const errorMsg = error.response
+        ? error.response.data.message
+        : "An error occurred while fetching recommendations.";
       return thunkAPI.rejectWithValue(errorMsg);
     }
   }
@@ -45,10 +49,12 @@ export const fetchPendingRequests = createAsyncThunk(
   "friends/fetchPendingRequests",
   async (_, thunkAPI) => {
     try {
-      const response = await axios.get("/getPendingRequests");  // Adjust endpoint as needed
-      return response.data;  // Return the pending requests data
+      const response = await axios.get("/getPendingRequests"); // Adjust endpoint as needed
+      return response.data; // Return the pending requests data
     } catch (error) {
-      const errorMsg = error.response ? error.response.data.message : 'An error occurred while fetching pending requests.';
+      const errorMsg = error.response
+        ? error.response.data.message
+        : "An error occurred while fetching pending requests.";
       return thunkAPI.rejectWithValue(errorMsg);
     }
   }
@@ -64,21 +70,37 @@ const friendsSlice = createSlice({
     },
     removeFriend: (state, action) => {
       // Removes a friend by id
-      state.friends = state.friends.filter(friend => friend.id !== action.payload);
+      state.friends = state.friends.filter(
+        (friend) => friend.id !== action.payload
+      );
     },
     // Action to accept a friend request
+    // Reducer for accepting a friend request
     acceptRequest: (state, action) => {
-      // Remove from pending and add to friends
-      const acceptedRequest = state.pendingRequests.find(request => request.id === action.payload);
+      const { fromUserId } = action.payload;
+
+      // Find the pending request based on the user ID
+      const acceptedRequest = state.pendingRequests.find(
+        (request) => request._id === fromUserId
+      );
+
       if (acceptedRequest) {
+        // Add the accepted request to the friends list
         state.friends.push(acceptedRequest);
-        state.pendingRequests = state.pendingRequests.filter(request => request.id !== action.payload);
+
+        // Remove the accepted request from pending requests
+        state.pendingRequests = state.pendingRequests.filter(
+          (request) => request._id !== fromUserId
+        );
       }
     },
+
     // Action to reject a friend request
     rejectRequest: (state, action) => {
       // Remove the request from pending
-      state.pendingRequests = state.pendingRequests.filter(request => request.id !== action.payload);
+      state.pendingRequests = state.pendingRequests.filter(
+        (request) => request.id !== action.payload
+      );
     },
   },
   extraReducers: (builder) => {
@@ -90,11 +112,11 @@ const friendsSlice = createSlice({
       })
       .addCase(fetchFriends.fulfilled, (state, action) => {
         state.loading = false;
-        state.friends = action.payload;  // Store the friends in the state
+        state.friends = action.payload; // Store the friends in the state
       })
       .addCase(fetchFriends.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload;  // Store the error message in the state
+        state.error = action.payload; // Store the error message in the state
       })
       // Handle the pending, fulfilled, and rejected states for fetchRecommendations
       .addCase(fetchRecommendations.pending, (state) => {
@@ -103,11 +125,11 @@ const friendsSlice = createSlice({
       })
       .addCase(fetchRecommendations.fulfilled, (state, action) => {
         state.loading = false;
-        state.recommendations = action.payload;  // Store the recommendations in the state
+        state.recommendations = action.payload; // Store the recommendations in the state
       })
       .addCase(fetchRecommendations.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload;  // Store the error message in the state
+        state.error = action.payload; // Store the error message in the state
       })
       // Handle the pending, fulfilled, and rejected states for fetchPendingRequests
       .addCase(fetchPendingRequests.pending, (state) => {
@@ -116,14 +138,15 @@ const friendsSlice = createSlice({
       })
       .addCase(fetchPendingRequests.fulfilled, (state, action) => {
         state.loading = false;
-        state.pendingRequests = action.payload;  // Store the pending requests in the state
+        state.pendingRequests = action.payload; // Store the pending requests in the state
       })
       .addCase(fetchPendingRequests.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload;  // Store the error message in the state
+        state.error = action.payload; // Store the error message in the state
       });
   },
 });
 
-export const { addFriend, removeFriend, acceptRequest, rejectRequest } = friendsSlice.actions;
+export const { addFriend, removeFriend, acceptRequest, rejectRequest } =
+  friendsSlice.actions;
 export default friendsSlice.reducer;

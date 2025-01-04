@@ -1,8 +1,6 @@
-// src/components/Layout.jsx
 import React from "react";
 import { Link } from "react-router-dom";
-import { FaHome, FaUserFriends, FaStar, FaSignOutAlt } from "react-icons/fa";
-// import { Button } from "./ui/button"; // Assuming you have this Button component
+import { FaHome, FaUserFriends, FaSignOutAlt } from "react-icons/fa";
 import { useDispatch } from "react-redux";
 import { logout } from "../features/auth/authSlice";
 import { Button } from "../components/ui/button";
@@ -10,7 +8,8 @@ import { useNavigate } from "react-router-dom";
 
 const Layout = ({ children }) => {
   const dispatch = useDispatch();
-const navigate = useNavigate();
+  const navigate = useNavigate();
+
   // Handle logout
   const handleLogout = () => {
     dispatch(logout());
@@ -42,7 +41,6 @@ const navigate = useNavigate();
               Friends
             </Link>
           </li>
-          
         </ul>
         <Button
           className="mt-8 w-full bg-red-500 hover:bg-red-600 flex items-center justify-center"
@@ -54,7 +52,7 @@ const navigate = useNavigate();
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 p-8">{children}</div>
+      <div className="flex-1 p-6 overflow-y-auto">{children}</div>
     </div>
   );
 };

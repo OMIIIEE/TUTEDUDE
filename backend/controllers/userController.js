@@ -141,7 +141,6 @@ const handleFriendRequest = async (req, res) => {
   }
 };
 
-
 // Get Friends List
 const getFriendsList = async (req, res) => {
   try {
@@ -175,21 +174,19 @@ const searchUsers = async (req, res) => {
 };
 
 const recommendFriends = async (req, res) => {
-    try {
-        const user = await User.findById(req.user.id).populate('friends');
-        const allUsers = await User.find({ _id: { $ne: req.user.id } });
+  try {
+    const user = await User.findById(req.user.id).populate("friends");
+    const allUsers = await User.find({ _id: { $ne: req.user.id } });
 
-        // Filter users who are not already friends
-        const recommendations = allUsers.filter(
-            (u) =>
-                !user.friends.includes(u.id) &&
-                !user.friendRequests.includes(u.id)
-        );
+    // Filter users who are not already friends
+    const recommendations = allUsers.filter(
+      (u) => !user.friends.includes(u.id) && !user.friendRequests.includes(u.id)
+    );
 
-        res.status(200).json(recommendations);
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
+    res.status(200).json(recommendations);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 };
 
 // Get All Users
@@ -233,7 +230,7 @@ module.exports = {
   handleFriendRequest,
   getFriendsList,
   searchUsers,
-  recommendFriends ,
+  recommendFriends,
   getAllUsers,
   getPendingRequests,
 };

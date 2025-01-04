@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "../../api/friends"; // Ensure axios is correctly configured with the correct baseURL
+import axios from "../../api/friends";  // Make sure axios is correctly configured with the correct baseURL
 
 // Initial state
 const initialState = {
@@ -48,7 +48,7 @@ export const fetchPendingRequests = createAsyncThunk(
   async (_, thunkAPI) => {
     try {
       const response = await axios.get("/getPendingRequests"); // Adjust endpoint as needed
-      return response.data; // Return the pending requests data
+      return Array.isArray(response.data) ? response.data : []; // Ensure it's an array
     } catch (error) {
       const errorMsg = error.response
         ? error.response.data.message
@@ -75,6 +75,7 @@ const friendsSlice = createSlice({
     // Reducer for accepting a friend request
     acceptRequest: (state, action) => {
       const { fromUserId } = action.payload;
+
 
       // Find the pending request based on the user ID
       const acceptedRequest = state.pendingRequests.find(

@@ -6,15 +6,18 @@ import {
   fetchPendingRequests,
   acceptRequest,
   rejectRequest,
-} from "../features/friends/friendsSlice"; // Assuming these actions are defined in your slice
-import axios from "../api/auth"; // Ensure the axios instance is set up for API requests
+} from "../features/friends/friendsSlice"; // Ensure these actions are defined in your slice
+import axios from "../api/auth";
 
-const Friends = ({ user }) => {
+const Friends = () => {
   const dispatch = useDispatch();
 
-  // Local state for pagination and search query
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
+  const [showFriends, setShowFriends] = useState(true);
+  const [showRequests, setShowRequests] = useState(false);
+  const [showRecommendations, setShowRecommendations] = useState(false);
+
   const itemsPerPage = 5;
 
   const { friends, recommendations, pendingRequests, loading, error } =
@@ -26,85 +29,50 @@ const Friends = ({ user }) => {
     dispatch(fetchPendingRequests());
   }, [dispatch]);
 
-  // Handle accepting a friend request
   const handleAcceptRequest = async (requestId) => {
     try {
-      const response = await axios.post("/handle-request", {
+      await axios.post("/handle-request", {
         fromUserId: requestId,
-        action: "accept", // Accept action
+        action: "accept",
       });
-
       dispatch(acceptRequest({ fromUserId: requestId }));
       alert("Friend request accepted!");
-      console.log(response.data);
     } catch (error) {
       console.error("Error accepting friend request:", error);
     }
   };
 
-  // Handle rejecting a friend request
   const handleRejectRequest = async (requestId) => {
     try {
-      const response = await axios.post("/handle-request", {
+      await axios.post("/handle-request", {
         fromUserId: requestId,
-        action: "reject", // Reject action
+        action: "reject",
       });
-
       dispatch(rejectRequest(requestId));
       alert("Friend request rejected!");
-      console.log(response.data);
     } catch (error) {
       console.error("Error rejecting friend request:", error);
     }
   };
 
-  // Handle search input
-  const handleSearch = (e) => {
-    setSearchQuery(e.target.value.toLowerCase());
-  };
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   if (loading) return <div className="text-center py-4">Loading...</div>;
   if (error) return <div className="text-center py-4 text-red-600">Error: {error}</div>;
 
   // Pagination logic
-  const indexOfLastFriend = currentPage * itemsPerPage;
-  const indexOfFirstFriend = indexOfLastFriend - itemsPerPage;
-  const currentFriends = friends
-    .filter((friend) =>
-      `${friend.fullname.firstname} ${friend.fullname.lastname}`
-        .toLowerCase()
-        .includes(searchQuery)
-    )
-    .slice(indexOfFirstFriend, indexOfLastFriend);
+  const getPaginatedItems = (items) =>
+    items
+      .filter((item) =>
+        `${item.fullname.firstname} ${item.fullname.lastname}`
+          .toLowerCase()
+          .includes(searchQuery)
+      )
+      .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
-  const indexOfLastRequest = currentPage * itemsPerPage;
-  const indexOfFirstRequest = indexOfLastRequest - itemsPerPage;
-  const currentRequests = pendingRequests
-    .filter((request) =>
-      `${request.fullname.firstname} ${request.fullname.lastname}`
-        .toLowerCase()
-        .includes(searchQuery)
-    )
-    .slice(indexOfFirstRequest, indexOfLastRequest);
-
-  const indexOfLastRecommendation = currentPage * itemsPerPage;
-  const indexOfFirstRecommendation =
-    indexOfLastRecommendation - itemsPerPage;
-  const currentRecommendations = recommendations
-    .filter((recommendation) =>
-      `${recommendation.fullname.firstname} ${recommendation.fullname.lastname}`
-        .toLowerCase()
-        .includes(searchQuery)
-    )
-    .slice(indexOfFirstRecommendation, indexOfLastRecommendation);
-
-  // Pagination handler
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
-
-  // Check if we have reached the last page for each section
-  const noMoreFriends = currentPage * itemsPerPage >= friends.length;
-  const noMoreRequests = currentPage * itemsPerPage >= pendingRequests.length;
-  const noMoreRecommendations = currentPage * itemsPerPage >= recommendations.length;
+  const currentFriends = getPaginatedItems(friends);
+  const currentRequests = getPaginatedItems(pendingRequests);
+  const currentRecommendations = getPaginatedItems(recommendations);
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -115,102 +83,129 @@ const Friends = ({ user }) => {
           placeholder="Search Friends, Requests, or Recommendations"
           className="p-2 border border-gray-300 rounded-lg w-full"
           value={searchQuery}
-          onChange={handleSearch}
+          onChange={(e) => setSearchQuery(e.target.value.toLowerCase())}
         />
       </div>
 
-      {/* Friends List Section */}
-      <div className="mb-8">
-        <h2 className="text-2xl font-semibold text-gray-800 mb-4">Friends List</h2>
-        <div className="overflow-x-auto bg-white shadow-lg rounded-lg p-4">
-          <ul className="space-y-4">
-            {currentFriends.map((friend) => (
-              <li key={friend._id} className="flex justify-between items-center p-4 border-b">
-                <div className="flex items-center space-x-3">
-                  <span className="text-lg font-medium">
-                    {friend.fullname.firstname} {friend.fullname.lastname}
-                  </span>
-                  <span className="text-sm text-gray-500">@{friend.username}</span>
+      {/* Collapsible Sections */}
+      <div className="space-y-6">
+        {/* Friends List Section */}
+        <div>
+          <button
+            className="w-full text-left text-xl font-semibold text-gray-800 bg-gray-200 py-2 px-4 rounded-lg"
+            onClick={() => setShowFriends(!showFriends)}
+          >
+            {showFriends ? "Hide Friends List" : "Show Friends List"}
+          </button>
+          {showFriends && (
+            <div className="mt-4 bg-white shadow rounded-lg p-4">
+              {currentFriends.map((friend) => (
+                <div
+                  key={friend._id}
+                  className="flex justify-between items-center py-2 border-b"
+                >
+                  <div>
+                    <span className="font-medium">{friend.fullname.firstname}</span>{" "}
+                    <span>{friend.fullname.lastname}</span>
+                    <p className="text-sm text-gray-500">@{friend.username}</p>
+                  </div>
                 </div>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
-
-      {/* Pending Requests Section */}
-      <div className="mb-8">
-        <h2 className="text-2xl font-semibold text-gray-800 mb-4">Pending Friend Requests</h2>
-        <div className="overflow-x-auto bg-white shadow-lg rounded-lg p-4">
-          {currentRequests.length === 0 ? (
-            <p className="text-center text-gray-500">No pending requests.</p>
-          ) : (
-            currentRequests.map((request) => (
-              <li key={request._id} className="flex justify-between items-center p-4 border-b">
-                <div className="flex items-center space-x-3">
-                  <span className="text-lg font-medium">
-                    {request.fullname.firstname} {request.fullname.lastname}
-                  </span>
-                  <span className="text-sm text-gray-500">@{request.username}</span>
-                </div>
-                <div className="space-x-3">
-                  <button
-                    onClick={() => handleAcceptRequest(request._id)}
-                    className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition"
-                  >
-                    Accept
-                  </button>
-                  <button
-                    onClick={() => handleRejectRequest(request._id)}
-                    className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition"
-                  >
-                    Reject
-                  </button>
-                </div>
-              </li>
-            ))
+              ))}
+              {/* Pagination */}
+              <div className="flex justify-center mt-4">
+                <button
+                  onClick={() => paginate(currentPage - 1)}
+                  className="px-4 py-2 mx-1 bg-gray-300 rounded-lg"
+                  disabled={currentPage === 1}
+                >
+                  Previous
+                </button>
+                <button
+                  onClick={() => paginate(currentPage + 1)}
+                  className="px-4 py-2 mx-1 bg-gray-300 rounded-lg"
+                  disabled={currentFriends.length < itemsPerPage}
+                >
+                  Next
+                </button>
+              </div>
+            </div>
           )}
         </div>
-      </div>
 
-      {/* Friend Recommendations Section */}
-      <div>
-        <h2 className="text-2xl font-semibold text-gray-800 mb-4">Friend Recommendations</h2>
-        <div className="overflow-x-auto bg-white shadow-lg rounded-lg p-4">
-          <ul className="space-y-4">
-            {currentRecommendations.map((recommendation) => (
-              <li key={recommendation._id} className="flex justify-between items-center p-4 border-b">
-                <div className="flex items-center space-x-3">
-                  <span className="text-lg font-medium">
-                    {recommendation.fullname.firstname} {recommendation.fullname.lastname}
-                  </span>
-                  <span className="text-sm text-gray-500">@{recommendation.username}</span>
-                </div>
-                <button className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition">
-                  Add Friend
-                </button>
-              </li>
-            ))}
-          </ul>
+        {/* Pending Requests Section */}
+        <div>
+          <button
+            className="w-full text-left text-xl font-semibold text-gray-800 bg-gray-200 py-2 px-4 rounded-lg"
+            onClick={() => setShowRequests(!showRequests)}
+          >
+            {showRequests ? "Hide Pending Requests" : "Show Pending Requests"}
+          </button>
+          {showRequests && (
+            <div className="mt-4 bg-white shadow rounded-lg p-4">
+              {currentRequests.length === 0 ? (
+                <p className="text-center text-gray-500">No pending requests.</p>
+              ) : (
+                currentRequests.map((request) => (
+                  <div
+                    key={request._id}
+                    className="flex justify-between items-center py-2 border-b"
+                  >
+                    <div>
+                      <span className="font-medium">{request.fullname.firstname}</span>{" "}
+                      <span>{request.fullname.lastname}</span>
+                      <p className="text-sm text-gray-500">@{request.username}</p>
+                    </div>
+                    <div className="space-x-2">
+                      <button
+                        onClick={() => handleAcceptRequest(request._id)}
+                        className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+                      >
+                        Accept
+                      </button>
+                      <button
+                        onClick={() => handleRejectRequest(request._id)}
+                        className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+                      >
+                        Reject
+                      </button>
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+          )}
         </div>
-      </div>
 
-      {/* Pagination Buttons */}
-      <div className="flex justify-center mt-4">
-        <button
-          onClick={() => paginate(currentPage - 1)}
-          className="px-4 py-2 mx-1 bg-gray-300 rounded-lg"
-          disabled={currentPage === 1}
-        >
-          Previous
-        </button>
-        <button
-          onClick={() => paginate(currentPage + 1)}
-          className="px-4 py-2 mx-1 bg-gray-300 rounded-lg"
-          disabled={noMoreFriends && noMoreRequests && noMoreRecommendations}
-        >
-          {noMoreFriends && noMoreRequests && noMoreRecommendations ? "No More Data" : "Next"}
-        </button>
+        {/* Friend Recommendations Section */}
+        <div>
+          <button
+            className="w-full text-left text-xl font-semibold text-gray-800 bg-gray-200 py-2 px-4 rounded-lg"
+            onClick={() => setShowRecommendations(!showRecommendations)}
+          >
+            {showRecommendations ? "Hide Recommendations" : "Show Recommendations"}
+          </button>
+          {showRecommendations && (
+            <div className="mt-4 bg-white shadow rounded-lg p-4">
+              {currentRecommendations.map((recommendation) => (
+                <div
+                  key={recommendation._id}
+                  className="flex justify-between items-center py-2 border-b"
+                >
+                  <div>
+                    <span className="font-medium">{recommendation.fullname.firstname}</span>{" "}
+                    <span>{recommendation.fullname.lastname}</span>
+                    <p className="text-sm text-gray-500">@{recommendation.username}</p>
+                  </div>
+                  <button
+                    className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                  >
+                    Add Friend
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

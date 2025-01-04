@@ -15,7 +15,7 @@ const Register = () => {
     username: "", // Added username field
   });
   const navigate = useNavigate();
-  const { loading, error , token} = useSelector((state) => state.auth);
+  const { loading, error, token } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
   const handleChange = (e) => {
@@ -25,13 +25,13 @@ const Register = () => {
   useEffect(() => {
     if (token) {
       // Redirect to the dashboard once the token is set
-      navigate("/dashboard"); 
+      navigate("/dashboard");
     }
   }, [token, navigate]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-  
+
     // Modify the form data to send the fullname object
     const formData = {
       fullname: {
@@ -43,7 +43,7 @@ const Register = () => {
       gender: form.gender,
       username: form.username, // Include the username as well
     };
-  
+
     dispatch(registerUser(formData)); // Dispatch the modified form data
   };
 
@@ -56,7 +56,9 @@ const Register = () => {
         {error && <p className="text-sm text-red-500">{error}</p>}
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block mb-2 text-sm text-gray-600">First Name</label>
+            <label className="block mb-2 text-sm text-gray-600">
+              First Name
+            </label>
             <Input
               type="text"
               name="firstname"
@@ -67,7 +69,9 @@ const Register = () => {
             />
           </div>
           <div>
-            <label className="block mb-2 text-sm text-gray-600">Last Name</label>
+            <label className="block mb-2 text-sm text-gray-600">
+              Last Name
+            </label>
             <Input
               type="text"
               name="lastname"
@@ -129,11 +133,11 @@ const Register = () => {
             {loading ? "Creating account..." : "Register"}
           </Button>
         </form>
-        
+
         {/* Login Link */}
         <p className="text-sm text-center text-gray-600">
           Already have an account?{" "}
-          <Link to="/login" className="text-blue-500 hover:underline">
+          <Link to="/" className="text-blue-500 hover:underline">
             Login
           </Link>
         </p>

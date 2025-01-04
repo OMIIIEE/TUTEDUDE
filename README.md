@@ -21,6 +21,10 @@ Develop a full-stack web application using the MERN stack (MongoDB, Express.js, 
 - **Authentication**: JWT (JSON Web Tokens)
 - **State Management**: Redux
 
+## Live Link
+
+     https://tutedude-blond.vercel.app
+
 ## Installation
 
 1. **Clone the repository**:

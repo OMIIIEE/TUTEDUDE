@@ -14,6 +14,8 @@ const corsOptions = {
   origin: "https://frontendtutedude.vercel.app", // The frontend URL
   methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE"], // Specify allowed methods
   allowedHeaders: ["Content-Type", "Authorization"], // Specify allowed headers
+  preflightContinue: false, // Ensures that OPTIONS request is handled automatically
+  optionsSuccessStatus: 204, // Some legacy browsers (IE11) choke on 204
 };
 
 // Enable CORS middleware with the options

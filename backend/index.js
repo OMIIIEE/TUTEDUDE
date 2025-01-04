@@ -11,7 +11,7 @@ app.use(express.json());
 
 // CORS Configuration
 const corsOptions = {
-  origin: "https://frontendtutedude.vercel.app", // The frontend URL
+  origin: "*", // The frontend URL
   methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE"], // Specify allowed methods
   allowedHeaders: ["Content-Type", "Authorization"], // Specify allowed headers
   preflightContinue: false, // Ensures that OPTIONS request is handled automatically

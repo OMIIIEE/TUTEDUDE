@@ -98,7 +98,13 @@ const Friends = ({ user }) => {
     )
     .slice(indexOfFirstRecommendation, indexOfLastRecommendation);
 
+  // Pagination handler
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+  // Check if we have reached the last page for each section
+  const noMoreFriends = currentPage * itemsPerPage >= friends.length;
+  const noMoreRequests = currentPage * itemsPerPage >= pendingRequests.length;
+  const noMoreRecommendations = currentPage * itemsPerPage >= recommendations.length;
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -201,9 +207,9 @@ const Friends = ({ user }) => {
         <button
           onClick={() => paginate(currentPage + 1)}
           className="px-4 py-2 mx-1 bg-gray-300 rounded-lg"
-          disabled={currentPage * itemsPerPage >= friends.length}
+          disabled={noMoreFriends && noMoreRequests && noMoreRecommendations}
         >
-          Next
+          {noMoreFriends && noMoreRequests && noMoreRecommendations ? "No More Data" : "Next"}
         </button>
       </div>
     </div>

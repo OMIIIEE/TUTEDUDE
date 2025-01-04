@@ -2,7 +2,7 @@ import axios from "axios";
 
 // Correct baseURL to reflect the `/users` endpoint
 const API = axios.create({
-  baseURL: "http://localhost:5000/api/users",
+  baseURL: `${import.meta.env.VITE_APP_BACKEND_URL}/api/users`,
 }); // Corrected here
 
 // Add token to the Authorization header if it exists in localStorage

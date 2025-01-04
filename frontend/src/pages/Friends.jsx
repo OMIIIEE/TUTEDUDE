@@ -12,8 +12,9 @@ import axios from "../api/auth"; // Ensure the axios instance is set up for API 
 const Friends = ({ user }) => {
   const dispatch = useDispatch();
 
-  // Local state for pagination
+  // Local state for pagination and search query
   const [currentPage, setCurrentPage] = useState(1);
+  const [searchQuery, setSearchQuery] = useState("");
   const itemsPerPage = 5;
 
   const { friends, recommendations, pendingRequests, loading, error } =
@@ -57,33 +58,61 @@ const Friends = ({ user }) => {
     }
   };
 
+  // Handle search input
+  const handleSearch = (e) => {
+    setSearchQuery(e.target.value.toLowerCase());
+  };
+
   if (loading) return <div className="text-center py-4">Loading...</div>;
   if (error) return <div className="text-center py-4 text-red-600">Error: {error}</div>;
 
   // Pagination logic
   const indexOfLastFriend = currentPage * itemsPerPage;
   const indexOfFirstFriend = indexOfLastFriend - itemsPerPage;
-  const currentFriends = friends.slice(indexOfFirstFriend, indexOfLastFriend);
+  const currentFriends = friends
+    .filter((friend) =>
+      `${friend.fullname.firstname} ${friend.fullname.lastname}`
+        .toLowerCase()
+        .includes(searchQuery)
+    )
+    .slice(indexOfFirstFriend, indexOfLastFriend);
 
   const indexOfLastRequest = currentPage * itemsPerPage;
   const indexOfFirstRequest = indexOfLastRequest - itemsPerPage;
-  const currentRequests = pendingRequests.slice(
-    indexOfFirstRequest,
-    indexOfLastRequest
-  );
+  const currentRequests = pendingRequests
+    .filter((request) =>
+      `${request.fullname.firstname} ${request.fullname.lastname}`
+        .toLowerCase()
+        .includes(searchQuery)
+    )
+    .slice(indexOfFirstRequest, indexOfLastRequest);
 
   const indexOfLastRecommendation = currentPage * itemsPerPage;
   const indexOfFirstRecommendation =
     indexOfLastRecommendation - itemsPerPage;
-  const currentRecommendations = recommendations.slice(
-    indexOfFirstRecommendation,
-    indexOfLastRecommendation
-  );
+  const currentRecommendations = recommendations
+    .filter((recommendation) =>
+      `${recommendation.fullname.firstname} ${recommendation.fullname.lastname}`
+        .toLowerCase()
+        .includes(searchQuery)
+    )
+    .slice(indexOfFirstRecommendation, indexOfLastRecommendation);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      {/* Search Bar */}
+      <div className="mb-6">
+        <input
+          type="text"
+          placeholder="Search Friends, Requests, or Recommendations"
+          className="p-2 border border-gray-300 rounded-lg w-full"
+          value={searchQuery}
+          onChange={handleSearch}
+        />
+      </div>
+
       {/* Friends List Section */}
       <div className="mb-8">
         <h2 className="text-2xl font-semibold text-gray-800 mb-4">Friends List</h2>

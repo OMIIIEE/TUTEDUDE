@@ -11,7 +11,7 @@ app.use(express.json());
 
 // CORS Configuration
 const corsOptions = {
-  origin: "https://tutedude-blond.vercel.app", // Replace with your frontend's URL
+  origin: "https://tutedude-blond.vercel.app", 
   methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization"],
   preflightContinue: false,

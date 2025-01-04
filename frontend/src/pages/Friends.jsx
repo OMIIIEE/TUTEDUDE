@@ -8,6 +8,7 @@ import {
   rejectRequest,
 } from "../features/friends/friendsSlice"; // Ensure these actions are defined in your slice
 import axios from "../api/auth";
+import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/solid";
 
 const Friends = () => {
   const dispatch = useDispatch();
@@ -101,10 +102,15 @@ const Friends = () => {
         {/* Friends List Section */}
         <div>
           <button
-            className="w-full text-left text-xl font-semibold text-gray-800 bg-gray-200 py-2 px-4 rounded-lg"
+            className="w-full flex justify-between items-center text-xl font-semibold text-gray-800 bg-gray-200 py-2 px-4 rounded-lg"
             onClick={() => setShowFriends(!showFriends)}
           >
             {showFriends ? "Hide Friends List" : "Show Friends List"}
+            {showFriends ? (
+              <ChevronUpIcon className="h-6 w-6 text-gray-500" />
+            ) : (
+              <ChevronDownIcon className="h-6 w-6 text-gray-500" />
+            )}
           </button>
           {showFriends && (
             <div className="mt-4 bg-white shadow rounded-lg p-4">
@@ -144,10 +150,15 @@ const Friends = () => {
         {/* Pending Requests Section */}
         <div>
           <button
-            className="w-full text-left text-xl font-semibold text-gray-800 bg-gray-200 py-2 px-4 rounded-lg"
+            className="w-full flex justify-between items-center text-xl font-semibold text-gray-800 bg-gray-200 py-2 px-4 rounded-lg"
             onClick={() => setShowRequests(!showRequests)}
           >
             {showRequests ? "Hide Pending Requests" : "Show Pending Requests"}
+            {showRequests ? (
+              <ChevronUpIcon className="h-6 w-6 text-gray-500" />
+            ) : (
+              <ChevronDownIcon className="h-6 w-6 text-gray-500" />
+            )}
           </button>
           {showRequests && (
             <div className="mt-4 bg-white shadow rounded-lg p-4">
@@ -188,10 +199,17 @@ const Friends = () => {
         {/* Friend Recommendations Section */}
         <div>
           <button
-            className="w-full text-left text-xl font-semibold text-gray-800 bg-gray-200 py-2 px-4 rounded-lg"
+            className="w-full flex justify-between items-center text-xl font-semibold text-gray-800 bg-gray-200 py-2 px-4 rounded-lg"
             onClick={() => setShowRecommendations(!showRecommendations)}
           >
-            {showRecommendations ? "Hide Recommendations" : "Show Recommendations"}
+            {showRecommendations
+              ? "Hide Recommendations"
+              : "Show Recommendations"}
+            {showRecommendations ? (
+              <ChevronUpIcon className="h-6 w-6 text-gray-500" />
+            ) : (
+              <ChevronDownIcon className="h-6 w-6 text-gray-500" />
+            )}
           </button>
           {showRecommendations && (
             <div className="mt-4 bg-white shadow rounded-lg p-4">

@@ -3,7 +3,7 @@ const User = require("../models/User");
 // const User = require("../models/User");
 
 const authMiddleware = async (req, res, next) => {
-  const token = req.header("Authorization")?.split(" ")[1]; // Extract token after "Bearer"
+  const token = req.header("Authorization")?.split(" ")[1]; 
 
   if (!token) {
     console.log("No token provided");

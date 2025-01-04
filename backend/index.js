@@ -11,12 +11,13 @@ app.use(express.json());
 
 // CORS Configuration
 const corsOptions = {
-  origin: "*", // The frontend URL
-  methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE"], // Specify allowed methods
-  allowedHeaders: ["Content-Type", "Authorization"], // Specify allowed headers
-  preflightContinue: false, // Ensures that OPTIONS request is handled automatically
-  optionsSuccessStatus: 204, // Some legacy browsers (IE11) choke on 204
+  origin: "https://tutedude-blond.vercel.app", // Replace with your frontend's URL
+  methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  preflightContinue: false,
+  optionsSuccessStatus: 204,
 };
+
 
 // Enable CORS middleware with the options
 app.use(cors(corsOptions));

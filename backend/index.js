@@ -9,7 +9,7 @@ connectDB();
 const app = express();
 app.use(express.json());
 const corsOptions = {
-  origin: process.env.FRONTEND_URL,
+  origin: 'https://frontendtutedude.vercel.app',
   methods: ["GET,HEAD,PUT,PATCH,POST,DELETE"],
   allowedHeaders: ["Content-Type", "Authorization"],
 };

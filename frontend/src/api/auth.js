@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Update the baseURL to match your backend's structure
 const API = axios.create({
-  baseURL: 'http://localhost:5000/api/users', // Ensure the endpoint prefix is correct
+  baseURL: 'https://backendtutedude.vercel.app/api/users', // Ensure the endpoint prefix is correct
 });
 
 // Add Authorization token to the headers

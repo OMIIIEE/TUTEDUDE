@@ -4,20 +4,12 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Provider } from "react-redux";
 import store from "./store";
 
-// Pages
-// import Login from "./pages/Login";
-// import Register from "./pages/Register";
-// import Friends from "./pages/Friends";
-// import Recommendations from "./pages/Recommendations";
-// import Dashboard from "./pages/Dashboard";
 
-// Layout
-// import Layout from "./components/Layout";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import Friends from "./pages/Friends";
-// import Recommendations from "./pages/Recommendations";
+
 import Layout from "./pages/Layout";
 
 const App = () => {

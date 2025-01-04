@@ -8,17 +8,23 @@ connectDB();
 
 const app = express();
 app.use(express.json());
+
+// CORS Configuration
 const corsOptions = {
-  origin: 'https://frontendtutedude.vercel.app',
-  methods: ["GET,HEAD,PUT,PATCH,POST,DELETE"],
-  allowedHeaders: ["Content-Type", "Authorization"],
+  origin: "https://frontendtutedude.vercel.app", // The frontend URL
+  methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE"], // Specify allowed methods
+  allowedHeaders: ["Content-Type", "Authorization"], // Specify allowed headers
 };
+
+// Enable CORS middleware with the options
 app.use(cors(corsOptions));
 
+// API routes
 app.use("/api/users", require("./routes/userRoutes"));
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
 app.get("/", (req, res) => {
   res.send("API is running...");
 });

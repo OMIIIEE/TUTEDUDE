@@ -57,8 +57,17 @@ const Friends = () => {
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-  if (loading) return <div className="text-center py-4">Loading...</div>;
-  if (error) return <div className="text-center py-4 text-red-600">Error: {error}</div>;
+  // Loader
+  if (loading)
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-blue-500"></div>
+      </div>
+    );
+
+  // Error
+  if (error)
+    return <div className="text-center py-4 text-red-600">Error: {error}</div>;
 
   // Pagination logic
   const getPaginatedItems = (items) =>

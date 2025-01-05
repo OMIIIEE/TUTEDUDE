@@ -48,15 +48,15 @@ const Register = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="w-full max-w-md p-8 space-y-6 bg-white rounded shadow-md">
-        <h1 className="text-2xl font-bold text-center text-gray-800">
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500">
+      <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-lg">
+        <h1 className="text-3xl font-extrabold text-center text-gray-800">
           Create an Account
         </h1>
-        {error && <p className="text-sm text-red-500">{error}</p>}
-        <form onSubmit={handleSubmit} className="space-y-4">
+        {error && <p className="text-sm text-red-500 text-center">{error}</p>}
+        <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            <label className="block mb-2 text-sm text-gray-600">
+            <label className="block mb-2 text-sm font-medium text-gray-700">
               First Name
             </label>
             <Input
@@ -69,7 +69,7 @@ const Register = () => {
             />
           </div>
           <div>
-            <label className="block mb-2 text-sm text-gray-600">
+            <label className="block mb-2 text-sm font-medium text-gray-700">
               Last Name
             </label>
             <Input
@@ -82,7 +82,9 @@ const Register = () => {
             />
           </div>
           <div>
-            <label className="block mb-2 text-sm text-gray-600">Email</label>
+            <label className="block mb-2 text-sm font-medium text-gray-700">
+              Email
+            </label>
             <Input
               type="email"
               name="email"
@@ -93,7 +95,9 @@ const Register = () => {
             />
           </div>
           <div>
-            <label className="block mb-2 text-sm text-gray-600">Password</label>
+            <label className="block mb-2 text-sm font-medium text-gray-700">
+              Password
+            </label>
             <Input
               type="password"
               name="password"
@@ -104,10 +108,12 @@ const Register = () => {
             />
           </div>
           <div>
-            <label className="block mb-2 text-sm text-gray-600">Gender</label>
+            <label className="block mb-2 text-sm font-medium text-gray-700">
+              Gender
+            </label>
             <select
               name="gender"
-              className="block w-full px-4 py-2 text-sm border rounded focus:ring focus:ring-blue-500 focus:ring-opacity-50"
+              className="block w-full px-4 py-2 text-sm border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               value={form.gender}
               onChange={handleChange}
               required
@@ -119,7 +125,9 @@ const Register = () => {
           </div>
           {/* Username field */}
           <div>
-            <label className="block mb-2 text-sm text-gray-600">Username</label>
+            <label className="block mb-2 text-sm font-medium text-gray-700">
+              Username
+            </label>
             <Input
               type="text"
               name="username"
@@ -129,7 +137,7 @@ const Register = () => {
               required
             />
           </div>
-          <Button type="submit" className="w-full">
+          <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white rounded-lg py-2 focus:ring-2 focus:ring-blue-500">
             {loading ? "Creating account..." : "Register"}
           </Button>
         </form>

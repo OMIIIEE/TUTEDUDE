@@ -18,45 +18,48 @@ const Login = () => {
   // Use useEffect to navigate after the token is set in Redux state
   useEffect(() => {
     if (token) {
-      // console.log("Token set, redirecting...");
       navigate("/dashboard"); // Redirect to the dashboard once the token is set
     }
   }, [token, navigate]); // Only run when token changes
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="w-full max-w-md p-8 space-y-6 bg-white rounded shadow-md">
-        <h1 className="text-2xl font-bold text-center text-gray-800">
-          Login to Your Account
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500">
+      <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-lg">
+        <h1 className="text-3xl font-extrabold text-center text-gray-800">
+          Welcome Back!
         </h1>
 
         {/* Error message display */}
-        {error && <div className="text-sm text-red-500">{error}</div>}
+        {error && <div className="text-sm text-red-500 text-center">{error}</div>}
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-6">
           {/* Email input */}
           <div>
-            <label className="block mb-2 text-sm text-gray-600">Email</label>
+            <label className="block mb-2 text-sm font-medium text-gray-700">
+              Email
+            </label>
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Enter your email"
-              className="w-full px-4 py-2 text-sm border rounded focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-3 text-sm border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
             />
           </div>
 
           {/* Password input */}
           <div>
-            <label className="block mb-2 text-sm text-gray-600">Password</label>
+            <label className="block mb-2 text-sm font-medium text-gray-700">
+              Password
+            </label>
             <input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Enter your password"
-              className="w-full px-4 py-2 text-sm border rounded focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-3 text-sm border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
             />
           </div>
@@ -65,7 +68,7 @@ const Login = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full px-4 py-2 text-white bg-blue-600 rounded hover:bg-blue-700 focus:ring-2 focus:ring-blue-500"
+            className="w-full px-4 py-3 text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:ring-2 focus:ring-blue-500"
           >
             {loading ? "Logging in..." : "Login"}
           </button>

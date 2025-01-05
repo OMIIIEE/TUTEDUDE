@@ -9,18 +9,12 @@ connectDB();
 const app = express();
 app.use(express.json());
 
-// CORS Configuration
-const corsOptions = {
-  origin: "https://tutedude-blond.vercel.app", 
-  methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE"],
+// Enable CORS for specific origins (development and production)
+app.use(cors({
+  origin: ['http://localhost:5173'],
+  methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization"],
-  preflightContinue: false,
-  optionsSuccessStatus: 204,
-};
-
-
-// Enable CORS middleware with the options
-app.use(cors(corsOptions));
+}));
 
 // API routes
 app.use("/api/users", require("./routes/userRoutes"));

@@ -1,4 +1,4 @@
-                                                                                              TUTEDUDE
+                                                                      TUTEDUDE
 
 TUTEDUDE is a web application designed to connect people, help them find friends, send friend requests, and manage their profiles. It is built using modern web technologies and follows a clean, user-friendly design. The application allows users to perform actions like searching for users, sending requests, and managing their dashboard.
 
